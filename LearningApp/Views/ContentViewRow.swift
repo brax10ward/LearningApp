@@ -27,7 +27,7 @@ struct ContentViewRow: View {
                 
                 HStack (spacing: 30) {
                     Text(lessonNumber)
-                        .font(.title)
+                        .font(.headline)
                         .bold()
                     
                     VStack(alignment: .leading, spacing: 3) {
