@@ -33,7 +33,7 @@ struct HomeViewRow: View {
                 
                 // MARK: LEARNING DETAILS
                 VStack(alignment: .leading, spacing: 10) {
-                    Text("Learn " + title)
+                    Text(title)
                         .bold()
                     
                     Text(description)
