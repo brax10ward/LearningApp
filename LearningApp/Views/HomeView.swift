@@ -38,11 +38,17 @@ struct HomeView: View {
                                 )
                                 
                                 // MARK: TEST CARD
-                                NavigationLink {
-                                    Text("test")
-                                } label: {
-                                    HomeViewRow(image: module.test.image, title: "\(module.category) Test", description: module.test.description, count: "\(module.test.questions.count) Questions", time: module.test.time)
-                                }
+                                NavigationLink(
+                                    destination: TestView()
+                                        .onAppear {
+                                            model.beginTest(module.id)
+                                        },
+                                    tag: module.id,
+                                    selection: $model.currentTestSelected,
+                                    label: {
+                                        HomeViewRow(image: module.test.image, title: "\(module.category) Test", description: module.test.description, count: "\(module.test.questions.count) Questions", time: module.test.time)
+                                    }
+                                )
                             }
                             .accentColor(.black)
                         }
