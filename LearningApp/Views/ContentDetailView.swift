@@ -19,10 +19,11 @@ struct ContentDetailView: View {
                 if let url = videoUrl {
                     VideoPlayer(player: AVPlayer(url: url))
                         .cornerRadius(10)
+                        .aspectRatio(CGSize(width: 335, height: 175), contentMode: .fit)
                 }
                 
                 // MARK: DESCRIPTION
-                // TODO
+                CodeTextView()
                 
                 // MARK: NEXT LESSON BUTTON
                 if model.hasNextLesson() {

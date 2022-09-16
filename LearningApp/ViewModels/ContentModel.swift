@@ -11,13 +11,14 @@ class ContentModel: ObservableObject {
     
     @Published var modules = [Module]()
     
-    // App state
+    // MARK: APP STATE
     @Published var currentModule: Module?
     var currentModuleIndex = 0
     
     @Published var currentLesson: Lesson?
     var currentLessonIndex = 0
     
+    @Published var lessonDescription = NSAttributedString()
     var styleData: Data?
     
     init() {
@@ -50,6 +51,8 @@ class ContentModel: ObservableObject {
             
             self.styleData = styleData
             
+            
+            
         } catch {
             print(error)
         }
@@ -70,10 +73,7 @@ class ContentModel: ObservableObject {
         }
         
         self.currentLesson = modules[currentModuleIndex].content.lessons[currentLessonIndex]
-    }
-    
-    func hasNextLesson() -> Bool {
-        return currentLessonIndex + 1 < currentModule!.content.lessons.count
+        self.lessonDescription = self.addStyling(currentLesson!.explanation)
     }
     
     func nextLesson() {
@@ -82,9 +82,39 @@ class ContentModel: ObservableObject {
         
         if currentLessonIndex < currentModule!.content.lessons.count {
             currentLesson = currentModule!.content.lessons[currentLessonIndex]
+            self.lessonDescription = self.addStyling(currentLesson!.explanation)
         } else {
             currentLessonIndex = 0
             currentLesson = nil
         }
+    }
+    
+    // MARK: UTIL METHODS
+    func hasNextLesson() -> Bool {
+        return currentLessonIndex + 1 < currentModule!.content.lessons.count
+    }
+    
+    // MARK: CODE STYLING METHODS
+    private func addStyling(_ htmlString: String) -> NSAttributedString {
+        var resultString = NSAttributedString()
+        var data = Data()
+        
+        // Add the styling data
+        if let styles = styleData {
+            data.append(styles)
+        }
+        
+        // Add the html data
+        data.append(Data(htmlString.utf8))
+        
+        // Convert the attributed string
+        if let attributedString = try? NSAttributedString(data: data, options: [.documentType: NSAttributedString.DocumentType.html], documentAttributes: nil) {
+            resultString = attributedString
+        } else {
+            print("Couldn't parse html")
+        }
+        
+        
+        return resultString
     }
 }
