@@ -39,6 +39,7 @@ struct HomeViewRow: View {
                     Text(description)
                         .font(.caption)
                         .padding(.bottom, 20)
+                        .multilineTextAlignment(.leading)
                     
                     HStack {
                         Image(systemName: "text.book.closed")
@@ -69,6 +70,6 @@ struct HomeViewRow: View {
 
 struct HomeViewRow_Previews: PreviewProvider {
     static var previews: some View {
-        HomeViewRow(image: "swift", title: "Learn Swift", description: "some description", count: "10 Lessons", time: "2 Hours")
+        HomeViewRow(image: "swift", title: "Learn Swift", description: "some description that is long enough to cover two lines", count: "10 Lessons", time: "2 Hours")
     }
 }

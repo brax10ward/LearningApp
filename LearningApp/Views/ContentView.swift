@@ -15,8 +15,6 @@ struct ContentView: View {
             LazyVStack {
                 if let currentModule = model.currentModule {
                     ForEach(0..<currentModule.content.lessons.count, id: \.self) { index in
-                        let lesson = currentModule.content.lessons[index]
-                        
                         // MARK: LESSON CARD
                         ContentViewRow(lessonIndex: index)
 
