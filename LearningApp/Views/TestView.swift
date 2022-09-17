@@ -64,8 +64,9 @@ struct TestView: View {
                             isSubmitted = false
                             selectedAnswerIndex = nil
                         } else {
-                            // Go to home screen
-                            model.currentTestSelected = nil
+                            // Go to results view
+                            model.currentQuestion = nil
+                            
                         }
                     } else {
                         isSubmitted = true
@@ -87,7 +88,7 @@ struct TestView: View {
             }
             .navigationBarTitle("\(currentModule.category) Test")
         } else {
-            ProgressView()
+            TestResultView(numOfCorrectionQuestions: numCorrect)
         }
     }
     
