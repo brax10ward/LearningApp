@@ -29,6 +29,7 @@ class ContentModel: ObservableObject {
     
     init() {
         getLocalData()
+        getRemoteData()
     }
     
     // MARK: DATA METHODS
@@ -43,7 +44,7 @@ class ContentModel: ObservableObject {
             
             let modules = try jsonDecoder.decode([Module].self, from: jsonData)
             
-            self.modules = modules
+            self.modules += modules
             
             
         } catch {
@@ -62,6 +63,35 @@ class ContentModel: ObservableObject {
         } catch {
             print(error)
         }
+    }
+    
+    func getRemoteData() {
+        let urlString = Constants.dataHostUrl + "data2.json"
+        
+        let hostURL = URL(string: urlString)
+        
+        if let url = hostURL {
+            let request = URLRequest(url: url)
+            
+            let session = URLSession.shared
+            session.dataTask(with: request) { data, response, error in
+                guard error == nil else {
+                    print("Error getting remote data")
+                    return
+                }
+                
+                do {
+                    let decoder = JSONDecoder()
+                    let modules = try decoder.decode([Module].self, from: data!)
+                    self.modules += modules
+                } catch {
+                    print("Error decoding remote JSON file")
+                }
+            }
+            .resume()
+        }
+        
+        
     }
     
     // MARK: LESSON METHODS
