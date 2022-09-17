@@ -58,27 +58,49 @@ struct TestView: View {
                 }
                 
                 Button(action: {
-                    isSubmitted = true
-                    // Check the answer
-                    if selectedAnswerIndex == currentQuestion.correctIndex {
-                        numCorrect += 1
+                    if isSubmitted == true {
+                        if model.hasNextQuestion() {
+                            model.nextTestQuestion()
+                            isSubmitted = false
+                            selectedAnswerIndex = nil
+                        } else {
+                            // Go to home screen
+                            model.currentTestSelected = nil
+                        }
+                    } else {
+                        isSubmitted = true
+                        // Check the answer
+                        if selectedAnswerIndex == currentQuestion.correctIndex {
+                            numCorrect += 1
+                        }
                     }
                 }) {
                     ZStack {
                         RectangleCard(color: .green)
-                        Text("Submit")
+                        Text(buttonText)
                             .foregroundColor(.white)
                             .bold()
                     }
                 }
                 .padding()
-                .disabled(isSubmitted || selectedAnswerIndex == nil)
-                
-                
+                .disabled(selectedAnswerIndex == nil)
             }
             .navigationBarTitle("\(currentModule.category) Test")
         } else {
             ProgressView()
+        }
+    }
+    
+    var buttonText: String {
+        // Check if answer has been submitted
+        if isSubmitted == true {
+            if !model.hasNextQuestion() {
+                return "Finish"
+            }
+            
+            return "Next"
+        } else {
+            return "Submit"
         }
     }
 }

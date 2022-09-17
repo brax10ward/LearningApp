@@ -64,7 +64,7 @@ class ContentModel: ObservableObject {
         }
     }
     
-    // MARK: MODULE NAV METHODS
+    // MARK: LESSON METHODS
     func beginModule(_ moduleId: Int) {
         if let moduleIndex = modules.firstIndex(where: {$0.id == moduleId}) {
             self.currentModuleIndex = moduleIndex
@@ -95,6 +95,10 @@ class ContentModel: ObservableObject {
         }
     }
     
+    func hasNextLesson() -> Bool {
+        return currentLessonIndex + 1 < currentModule!.content.lessons.count
+    }
+    
     // MARK: TEST METHODS
     func beginTest(_ moduleId: Int) {
         beginModule(moduleId)
@@ -108,9 +112,20 @@ class ContentModel: ObservableObject {
         }
     }
     
-    // MARK: UTIL METHODS
-    func hasNextLesson() -> Bool {
-        return currentLessonIndex + 1 < currentModule!.content.lessons.count
+    func nextTestQuestion() {
+        currentQuestionIndex += 1
+        
+        if currentQuestionIndex < currentModule!.test.questions.count {
+            currentQuestion = currentModule!.test.questions[currentQuestionIndex]
+            codeText = addStyling(currentQuestion!.content)
+        } else {
+            currentQuestionIndex = 0
+            currentQuestion = nil
+        }
+    }
+    
+    func hasNextQuestion() -> Bool {
+        return currentQuestionIndex + 1 < currentModule!.test.questions.count
     }
     
     // MARK: CODE STYLING METHODS
